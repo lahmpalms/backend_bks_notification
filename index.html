@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TEST WEBSOCKET</title>
+    <script>
+      const ws = new WebSocket("ws://localhost:4000");
+
+      ws.onopen = () => {
+        console.log("Connected to WebSocket server!");
+        ws.send("Hello from the client!");
+      };
+
+      ws.onmessage = (event) => {
+        console.log("Received message from server:", event.data);
+        createDivElement(event.data);
+      };
+
+      ws.onclose = () => {
+        console.log("Disconnected from server");
+      };
+      function createDivElement(data) {
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "myDiv");
+        newDiv.innerHTML = data;
+        document.body.appendChild(newDiv);
+      }
+    </script>
+  </head>
+  <style type="text/css">
+    #myDiv {
+      border: 1px solid #000;
+      padding: 9px;
+      width: 50%;
+      margin-bottom: 14px;
+    }
+  </style>
+  <body>
+    <div id="myDiv"></div>
+  </body>
+</html>
