@@ -34,8 +34,8 @@ const verifyClient = async (token) => {
   }
 };
 
-const setUpWebSocketServer = () => {
-  const wss = new WebSocketServer({ port: process.env.WEBSOCKET_PORT });
+const setUpWebSocketServer = (server) => {
+  const wss = new WebSocketServer({ server });
   wss.on("connection", async (client, request_ws) => {
     const token = request_ws.headers.authorization;
 
