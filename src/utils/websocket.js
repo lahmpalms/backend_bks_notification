@@ -37,6 +37,10 @@ const verifyClient = async (token) => {
 const setUpWebSocketServer = (server) => {
   const wss = new WebSocketServer({ server });
   wss.on("connection", async (client, request_ws) => {
+    client.isAlive = true;
+    client.on("pong", () => {
+      client.isAlive = true;
+    });
     const token = request_ws.headers.authorization;
 
     try {
@@ -63,6 +67,20 @@ const setUpWebSocketServer = (server) => {
       client.close();
       console.error("Error during WebSocket connection:", error);
     }
+
+    const interval = setInterval(() => {
+      wss.clients.forEach((ws) => {
+        if (!ws.isAlive) return ws.terminate();
+
+        ws.isAlive = false;
+        ws.ping();
+      });
+    }, 30000); 
+
+    // Clear the interval when the WebSocket server closes to prevent a memory leak
+    wss.on("close", () => {
+      clearInterval(interval);
+    });
   });
 
   return wss;
