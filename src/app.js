@@ -5,10 +5,12 @@ import http from "http";
 import fs from "fs";
 import mongoose from "mongoose";
 import { setUpWebSocketServer } from "./utils/websocket.js";
-import broadcastRoutes from "./routes/broadcastRoutes.js";
-import chatRoutes from "./routes/chatRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+
+import broadcastRoutes from "./routes/broadcastRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
 
 dotenv.config();
 
@@ -25,6 +27,7 @@ connectDB();
 // Set up HTTP routes
 app.use("/chat", chatRoutes);
 app.use("/broadcast", broadcastRoutes);
+app.use("/service", serviceRoutes);
 
 const PORT = process.env.SERVER_PORT || 3000;
 server.listen(PORT, () => {

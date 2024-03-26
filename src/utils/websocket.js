@@ -1,4 +1,3 @@
-// src/utils/websocket.js
 import { WebSocketServer } from "ws";
 import { jwtDecode } from "jwt-decode";
 import dotenv from "dotenv";
@@ -12,7 +11,7 @@ const verifyClient = async (token) => {
     const decoded = jwtDecode(token); // Assume jwtDecode is synchronous or make it async accordingly
     // Implement your token verification logic here, replace request with fetch or another HTTP client if necessary
     const response = await fetch(
-      "http://18.136.199.82/api/v1/service/verify_access_service",
+      `${process.env.MICROSERVICE_URL}/api/v1/service/verify_access_service`,
       {
         method: "GET",
         headers: {
@@ -75,7 +74,7 @@ const setUpWebSocketServer = (server) => {
         ws.isAlive = false;
         ws.ping();
       });
-    }, 30000); 
+    }, 30000);
 
     // Clear the interval when the WebSocket server closes to prevent a memory leak
     wss.on("close", () => {
